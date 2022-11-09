@@ -1,15 +1,16 @@
+import jwt
 from django.contrib.auth import login
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView, RetrieveAPIView, \
     UpdateAPIView
 from rest_framework.response import Response
-from knox.models import AuthToken
 from rest_framework.views import APIView
 
-from tfc.accounts import serializers
-from tfc.accounts.models import CustomUser
-from tfc.accounts.serializers import RegisterSerializer, UserSerializer
+from accounts import serializers
+from accounts.models import CustomUser
+from accounts.serializers import LoginSerializer, RegisterSerializer, \
+    CustomUserSerializer
 
 
 # Create your views here.
@@ -21,29 +22,27 @@ class RegisterView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response({
-            "user": UserSerializer(user,
-                                   context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
+            "user": CustomUserSerializer(user,
+                                         context=self.get_serializer_context()).data
         })
 
 
-class LoginView(APIView):
-    permission_classes = (permissions.AllowAny,)
+class LoginView(GenericAPIView):
+    serializer_class = LoginSerializer
 
     def post(self, request):
-        serializer = serializers.LoginSerializer(data=self.request.data,
-                                                 context={
-                                                     'request': self.request})
+        serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return Response({"user": UserSerializer(user, context={
-                                                     'request': self.request}).data,
-                         "token": AuthToken.objects.create(user)[1]})
+        return Response({"user": CustomUserSerializer(user,
+                                                      context=self.get_serializer_context()).data
+                         })
 
 
 class UserView(RetrieveAPIView, UpdateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
 
     def get_object(self):
-        return get_object_or_404(CustomUser, id=self.kwargs['id'])
+        serializer = CustomUserSerializer(self.request.user)
+        return Response(serializer.data)

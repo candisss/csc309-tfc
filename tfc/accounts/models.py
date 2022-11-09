@@ -5,5 +5,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class CustomUser(AbstractUser):
-    subscribed = models.BooleanField()
-    avatar = models.ImageField(required=False)
+    subscribed = models.BooleanField(null=True)
+    avatar = models.ImageField(null=True)
+    phone_num = models.CharField(max_length=15)
