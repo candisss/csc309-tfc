@@ -87,7 +87,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(data['password'])
         user.save()
-
         return user
 
 
