@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import CASCADE
+
 
 # Create your models here.
 class Studio(models.Model):
@@ -7,3 +9,12 @@ class Studio(models.Model):
     geo_loc = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=100)
     phone_num = models.CharField(max_length=100)
+
+class Amenities(models.Model):
+    studio = models.ForeignKey(to=Studio, on_delete=CASCADE)
+    type = models.CharField(max_length=50)
+    quantity = models.IntegerField()
+
+class Images(models.Model):
+    studio = models.ForeignKey(to=Studio, on_delete=CASCADE)
+    image = models.ImageField(null=True)
