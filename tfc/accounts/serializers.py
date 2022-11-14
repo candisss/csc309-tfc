@@ -1,27 +1,31 @@
 import re
 
 from django.contrib.auth import authenticate
+from django.db import models
+
 from django.core.validators import EmailValidator
 from rest_framework import serializers
 
 from accounts.models import CustomUser
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 
 
-class CustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'first_name', 'last_name', 'username', 'email',
-                  'phone_num', 'subscribed']
+# class CustomUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser
+#         fields = ['id', 'first_name', 'last_name', 'username', 'email',
+#                   'phone_num', 'subscribed']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
+    # password = serializers.CharField(required=True)
+    # password2 = serializers.CharField(required=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'first_name', 'last_name', 'username', 'email',
+        fields = ['first_name', 'last_name', 'username', 'email', 'avatar',
                   'phone_num', 'password', 'password2']
 
     def validate_username(self, data):
@@ -78,8 +82,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             phone_num=data['phone_num'],
             avatar=avatar,
             username=data['username'],
-            email=data['email'],
-            subscribed=False
+            email=data['email']
         )
 
         user.set_password(data['password'])
@@ -88,21 +91,32 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'password']
+class LoginSerializer(serializers.Serializer):
+    # class Meta:
+    #     model = CustomUser
+    #     fields = ['username', 'password']
+    username = serializers.CharField()
+    password = serializers.CharField()
 
     def validate(self, data):
-        username = data['username']
-        password = data['password']
+        username = data.get('username')
+        password = data.get('password')
 
         if not username:
             raise serializers.ValidationError("Username is required")
         if not password:
             raise serializers.ValidationError("Password is required")
-        if not (user := authenticate(username=username, password=password)):
+
+        user = CustomUser.objects.filter(username=username)
+        if user.exists() and user.count() == 1:
+            user_obj = user.first()
+        else:
             raise serializers.ValidationError(
-                    'Username or password is invalid')
-        data['user'] = user
+                "This username/email is not valid.")
+
+        if user_obj:
+            if not user_obj.check_password(password):
+                raise serializers.ValidationError("Invalid credentials.")
+
+        data['user'] = user_obj
         return data
