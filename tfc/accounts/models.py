@@ -2,6 +2,9 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import SET_NULL
+
+from subscriptions.models import Subscription
 
 
 # Create your models here.
@@ -45,6 +48,8 @@ class CustomUser(AbstractUser):
     password = models.CharField(max_length=30)
     password2 = models.CharField(max_length=30)
     phone_num = models.CharField(max_length=15)
+    subscription = models.ForeignKey(to=Subscription, on_delete=SET_NULL,
+                                     null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

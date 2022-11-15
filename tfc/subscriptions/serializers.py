@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from subscriptions.models import Subscriptions, PaymentCards, PaymentHistory
+from subscriptions.models import Subscription, PaymentCard, PaymentHistory
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Subscriptions
+        model = Subscription
         fields = ['price', 'term']
 
 
 class PaymentCardsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PaymentCards
+        model = PaymentCard
         fields = ['card_holder_name', 'card_num', 'expiry_date', 'postal_code',
                   'billing_address']
 
@@ -18,4 +18,4 @@ class PaymentCardsSerializer(serializers.ModelSerializer):
 class PaymentHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentHistory
-        fields = ['amount_paid', 'payment_card', 'date', 'time']
+        fields = ['amount_paid', 'payment_card', 'datetime']
