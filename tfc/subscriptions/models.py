@@ -32,7 +32,7 @@ class PaymentHistory(models.Model):
     payment_card = models.CharField(max_length=50)
     datetime = models.DateTimeField()
     user = models.ForeignKey(to=CustomUser, on_delete=CASCADE,
-                             related_name='payment_cards')
+                             related_name='payment_histories')
 
     def __str__(self):
         return self.amount_paid, self.datetime.__str__()

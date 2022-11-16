@@ -5,7 +5,7 @@ from subscriptions.views import CreateSubscriptionView, SubscriptionView, \
 
 app_name = "Subscriptions"
 
-urlpattern = [
+urlpatterns = [
     path('all/', SubscriptionsView.as_view()),
     path('new/', CreateSubscriptionView.as_view()),
     path('<int:subscription_id>/', SubscriptionView.as_view()),
