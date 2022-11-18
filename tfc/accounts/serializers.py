@@ -50,7 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_phone_num(self, data):
         phone_num = data
         num_regex = re.compile(
-            '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$')
+            '^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$')
         if not num_regex.match(phone_num):
             raise serializers.ValidationError('Enter a valid phone number.')
         return phone_num
@@ -119,3 +119,21 @@ class LoginSerializer(serializers.Serializer):
 
         data['user'] = user_obj
         return data
+
+class EditProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ['email']
+
+    def validate_email(self, data):
+        email = data
+        if email != '':
+            validator = EmailValidator(message='Enter a valid email address')
+            validator(email)
+        return email
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data['email']
+        instance.save()
+        return instance
