@@ -1,5 +1,4 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import SET_NULL
@@ -50,6 +49,7 @@ class CustomUser(AbstractUser):
     subscription = models.ForeignKey("subscriptions.Subscription",
                                      on_delete=SET_NULL, null=True, blank=True,
                                      related_name="subscription")
+    is_subscribed = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
