@@ -3,12 +3,17 @@ from django.db.models import CASCADE
 
 from accounts.models import CustomUser
 
+SUBSCRIPTION_LENGTH_CHOICES = (
+    ("YEAR", "Year"),
+    ("MONTH", "Month"),
+)
+
 
 # Create your models here.
 class Subscription(models.Model):
     price = models.CharField(max_length=50)
     # term can only be "year" or "month"
-    term = models.CharField(max_length=50)
+    term = models.CharField(max_length=10, choices=SUBSCRIPTION_LENGTH_CHOICES)
 
     def __str__(self):
         return self.price, self.term

@@ -47,8 +47,9 @@ class CustomUser(AbstractUser):
     password = models.CharField(max_length=30)
     password2 = models.CharField(max_length=30)
     phone_num = models.CharField(max_length=15)
-    subscription = models.ForeignKey(to="subscriptions.Subscription", on_delete=SET_NULL,
-                                     null=True, blank=True)
+    subscription = models.ForeignKey("subscriptions.Subscription",
+                                     on_delete=SET_NULL, null=True, blank=True,
+                                     related_name="subscription")
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
