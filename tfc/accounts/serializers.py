@@ -90,35 +90,35 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.Serializer):
-    # class Meta:
-    #     model = CustomUser
-    #     fields = ['username', 'password']
-    username = serializers.CharField()
-    password = serializers.CharField()
-
-    def validate(self, data):
-        username = data.get('username')
-        password = data.get('password')
-
-        if not username:
-            raise serializers.ValidationError("Username is required")
-        if not password:
-            raise serializers.ValidationError("Password is required")
-
-        user = CustomUser.objects.filter(username=username)
-        if user.exists() and user.count() == 1:
-            user_obj = user.first()
-        else:
-            raise serializers.ValidationError(
-                "This username/email is not valid.")
-
-        if user_obj:
-            if not user_obj.check_password(password):
-                raise serializers.ValidationError("Invalid credentials.")
-
-        data['user'] = user_obj
-        return data
+# class LoginSerializer(serializers.Serializer):
+#     # class Meta:
+#     #     model = CustomUser
+#     #     fields = ['username', 'password']
+#     username = serializers.CharField()
+#     password = serializers.CharField()
+#
+#     def validate(self, data):
+#         username = data.get('username')
+#         password = data.get('password')
+#
+#         if not username:
+#             raise serializers.ValidationError("Username is required")
+#         if not password:
+#             raise serializers.ValidationError("Password is required")
+#
+#         user = CustomUser.objects.filter(username=username)
+#         if user.exists() and user.count() == 1:
+#             user_obj = user.first()
+#         else:
+#             raise serializers.ValidationError(
+#                 "This username/email is not valid.")
+#
+#         if user_obj:
+#             if not user_obj.check_password(password):
+#                 raise serializers.ValidationError("Invalid credentials.")
+#
+#         data['user'] = user_obj
+#         return data
 
 class EditProfileSerializer(serializers.ModelSerializer):
 

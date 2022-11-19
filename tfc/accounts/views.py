@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
-from accounts.serializers import LoginSerializer, RegisterSerializer, EditProfileSerializer
+from accounts.serializers import RegisterSerializer, EditProfileSerializer
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -28,18 +28,18 @@ class RegisterView(generics.CreateAPIView):
     #         token, created = Token.objects.get_or_create(user=user)
     #     return Response({"status": status.HTTP_200_OK, "Token": token.key})
 
-class LoginView(GenericAPIView):
-    serializer_class = LoginSerializer
-    permission_classes = (AllowAny,)
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data,
-                                     context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({"status": status.HTTP_200_OK, "Token": token.key})
+# class LoginView(GenericAPIView):
+#     serializer_class = LoginSerializer
+#     permission_classes = (AllowAny,)
+#
+#     def post(self, request):
+#         serializer = LoginSerializer(data=request.data,
+#                                      context={'request': request})
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
+#         login(request, user)
+#         token, created = Token.objects.get_or_create(user=user)
+#         return Response({"status": status.HTTP_200_OK, "Token": token.key})
 
 
 # class LogoutView(GenericAPIView):
