@@ -44,7 +44,7 @@ class PaymentCardSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        return super(PaymentCardsSerializer, self).create(validated_data)
+        return super(PaymentCardSerializer, self).create(validated_data)
 
 
 class PaymentHistorySerializer(serializers.ModelSerializer):

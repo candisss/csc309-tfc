@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'accounts',
     'classes',
     'studios',
-    'subscriptions'
+    'subscriptions',
+    'coreapi', # Coreapi for coreapi documentation
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

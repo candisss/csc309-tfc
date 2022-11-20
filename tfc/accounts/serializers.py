@@ -1,27 +1,12 @@
 import re
-
-from django.contrib.auth import authenticate
-from django.db import models
-
 from django.core.validators import EmailValidator
 from rest_framework import serializers
 
 from accounts.models import CustomUser
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
 
-
-# class CustomUserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = CustomUser
-#         fields = ['id', 'first_name', 'last_name', 'username', 'email',
-#                   'phone_num', 'subscribed']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    # password = serializers.CharField(required=True)
-    # password2 = serializers.CharField(required=True)
 
     class Meta:
         model = CustomUser
