@@ -8,7 +8,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = ['price', 'term']
 
 
-class PaymentCardsSerializer(serializers.ModelSerializer):
+class PaymentCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentCard
         fields = ['card_holder_name', 'card_num', 'expiry_date', 'postal_code',

@@ -7,8 +7,10 @@ from django.views.generic import TemplateView, ListView
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
-from subscriptions.models import Subscription
-from subscriptions.serializers import SubscriptionSerializer
+from subscriptions.models import PaymentHistory, Subscription
+from subscriptions.serializers import PaymentCardSerializer, \
+    PaymentHistorySerializer, \
+    SubscriptionSerializer
 
 
 # Create your views here.
@@ -32,6 +34,22 @@ class SubscriptionsView(ListAPIView):
 class CreateSubscriptionView(CreateAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = SubscriptionSerializer
+
+
+class PaymentHistoryView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PaymentHistorySerializer
+
+    def get_object(self):
+        return self.request.user.payment_histories
+
+
+class PaymentCardView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PaymentCardSerializer
+
+    def get_object(self):
+        return self.request.user.payment_cards
 
 
 # class EditSubscriptionView(UpdateAPIView):
