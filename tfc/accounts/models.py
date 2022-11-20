@@ -33,7 +33,6 @@ class MyAccountManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    # subscribed = models.BooleanField(null=True)
     username = models.CharField(max_length=15, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -45,6 +44,8 @@ class CustomUser(AbstractUser):
     subscription = models.ForeignKey("subscriptions.Subscription",
                                      on_delete=SET_NULL, null=True, blank=True,
                                      related_name="subscription")
+    subscribed = models.BooleanField(default=False)
+    next_payment_date = models.DateField(default=None, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

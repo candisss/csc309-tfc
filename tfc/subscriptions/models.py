@@ -25,8 +25,8 @@ class PaymentCard(models.Model):
     expiry_date = models.CharField(max_length=50)
     postal_code = models.CharField(max_length=50)
     billing_address = models.CharField(max_length=100)
-    user = models.ForeignKey(to=CustomUser, on_delete=CASCADE,
-                             related_name='payment_cards')
+    user = models.OneToOneField(to=CustomUser, on_delete=CASCADE,
+                                related_name='payment_card')
 
     def __str__(self):
         return self.card_holder_name, self.card_num
@@ -35,7 +35,7 @@ class PaymentCard(models.Model):
 class PaymentHistory(models.Model):
     amount_paid = models.CharField(max_length=50)
     payment_card = models.CharField(max_length=50)
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(to=CustomUser, on_delete=CASCADE,
                              related_name='payment_histories')
 
