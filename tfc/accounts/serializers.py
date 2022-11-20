@@ -50,7 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_phone_num(self, data):
         phone_num = data
         num_regex = re.compile(
-            '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$')
+            '^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$')
         if not num_regex.match(phone_num):
             raise serializers.ValidationError('Enter a valid phone number.')
         return phone_num
@@ -90,32 +90,52 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.Serializer):
-    # class Meta:
-    #     model = CustomUser
-    #     fields = ['username', 'password']
-    username = serializers.CharField()
-    password = serializers.CharField()
+# class LoginSerializer(serializers.Serializer):
+#     # class Meta:
+#     #     model = CustomUser
+#     #     fields = ['username', 'password']
+#     username = serializers.CharField()
+#     password = serializers.CharField()
+#
+#     def validate(self, data):
+#         username = data.get('username')
+#         password = data.get('password')
+#
+#         if not username:
+#             raise serializers.ValidationError("Username is required")
+#         if not password:
+#             raise serializers.ValidationError("Password is required")
+#
+#         user = CustomUser.objects.filter(username=username)
+#         if user.exists() and user.count() == 1:
+#             user_obj = user.first()
+#         else:
+#             raise serializers.ValidationError(
+#                 "This username/email is not valid.")
+#
+#         if user_obj:
+#             if not user_obj.check_password(password):
+#                 raise serializers.ValidationError("Invalid credentials.")
+#
+#         data['user'] = user_obj
+#         return data
 
-    def validate(self, data):
-        username = data.get('username')
-        password = data.get('password')
+class EditProfileSerializer(serializers.ModelSerializer):
 
-        if not username:
-            raise serializers.ValidationError("Username is required")
-        if not password:
-            raise serializers.ValidationError("Password is required")
+    class Meta:
+        model = CustomUser
+        fields = ['email']
 
-        user = CustomUser.objects.filter(username=username)
-        if user.exists() and user.count() == 1:
-            user_obj = user.first()
-        else:
-            raise serializers.ValidationError(
-                "This username/email is not valid.")
+    def validate_email(self, data):
+        email = data
+        if email != '':
+            validator = EmailValidator(message='Enter a valid email address')
+            validator(email)
+        return email
 
-        if user_obj:
-            if not user_obj.check_password(password):
-                raise serializers.ValidationError("Invalid credentials.")
+    def update(self, instance, validated_data):
+        instance.email = validated_data['email']
+        instance.save()
+        return instance
 
-        data['user'] = user_obj
-        return data
+

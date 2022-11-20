@@ -13,43 +13,52 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
-from accounts.serializers import LoginSerializer, RegisterSerializer
-
-
+from accounts.serializers import RegisterSerializer, EditProfileSerializer
 
 class RegisterView(generics.CreateAPIView):
-    # queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = RegisterSerializer(data=request.data,
-                                        context={'request': request})
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
-        return Response({"status": status.HTTP_200_OK, "Token": token.key})
+    # def post(self, request, *args, **kwargs):
+    #     serializer = RegisterSerializer(data=request.data,
+    #                                     context={'request': request})
+    #     if serializer.is_valid(raise_exception=True):
+    #         user = serializer.save()
+    #         token, created = Token.objects.get_or_create(user=user)
+    #     return Response({"status": status.HTTP_200_OK, "Token": token.key})
 
-class LoginView(GenericAPIView):
-    serializer_class = LoginSerializer
-    permission_classes = (AllowAny,)
+# class LoginView(GenericAPIView):
+#     serializer_class = LoginSerializer
+#     permission_classes = (AllowAny,)
+#
+#     def post(self, request):
+#         serializer = LoginSerializer(data=request.data,
+#                                      context={'request': request})
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
+#         login(request, user)
+#         token, created = Token.objects.get_or_create(user=user)
+#         return Response({"status": status.HTTP_200_OK, "Token": token.key})
 
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data,
-                                     context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({"status": status.HTTP_200_OK, "Token": token.key})
+
+# class LogoutView(GenericAPIView):
+#     permission_classes = [IsAuthenticated]
+#     # authentication_classes = [TokenAuthentication]
+#
+#     def get(self, request):
+#         print(request)
+#         request.user.auth_token.delete()
+#         logout(request)
+#         return Response('User Logged out successfully')
 
 
-class LogoutView(GenericAPIView):
-    permission_classes = [IsAuthenticated]
-    # authentication_classes = [TokenAuthentication]
+class EditProfileView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = EditProfileSerializer
 
-    def get(self, request):
-        print(request)
-        request.user.auth_token.delete()
-        logout(request)
-        return Response('User Logged out successfully')
+    # def post(self, request):
+    #     print(request.user)
+    #     return Response('test')
+
