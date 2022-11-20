@@ -13,14 +13,14 @@ from classes.serializers import ClassOccurrenceSerializer
 class EnrollStudentsView(APIView):
 
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
+        data = request.POST
         user = request.user
         class_id = data.get('class_id')
         enrol_type = data.get('type')
         date_str = data.get('date')
         try:
             class_obj = Class.objects.get(id=class_id)
-            assert user.is_subscribed
+            assert user.subscribed
             if enrol_type == 'single':
                 date_obj = dt.strptime(date_str, '%Y-%m-%d').date()
                 if date_obj > dt.today().date():
@@ -77,7 +77,7 @@ class EnrollStudentsView(APIView):
 class DropStudentsView(APIView):
 
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
+        data = request.POST
         user = request.user
         class_id = data.get('class_id')
         drop_type = data.get('type')
