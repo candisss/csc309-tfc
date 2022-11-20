@@ -1,6 +1,8 @@
 import re
 
 from rest_framework import serializers
+from rest_framework.fields import CurrentUserDefault
+
 from subscriptions.models import Subscription, PaymentCard, PaymentHistory
 
 
@@ -10,11 +12,13 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = ['price', 'term']
 
 
-class PaymentCardsSerializer(serializers.ModelSerializer):
+class PaymentCardSerializer(serializers.ModelSerializer):
+    user = CurrentUserDefault()
+
     class Meta:
         model = PaymentCard
         fields = ['card_holder_name', 'card_num', 'expiry_date', 'postal_code',
-                  'billing_address']
+                  'billing_address', 'user']
 
     def validate_card_num(self, data):
         card_num = data
@@ -44,6 +48,8 @@ class PaymentCardsSerializer(serializers.ModelSerializer):
 
 
 class PaymentHistorySerializer(serializers.ModelSerializer):
+    user = CurrentUserDefault()
+
     class Meta:
         model = PaymentHistory
-        fields = ['amount_paid', 'payment_card', 'datetime']
+        fields = ['amount_paid', 'payment_card', 'datetime', 'user']
