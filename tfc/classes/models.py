@@ -8,7 +8,7 @@ from studios.models import Studio
 class Keyword(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
     class Meta:
@@ -27,7 +27,7 @@ class Class(models.Model):
     )
     name = models.CharField(max_length=125)
     description = models.TextField(blank=True, null=True)
-    coach = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='class_coach')
+    coach = models.CharField(max_length=100, blank=True, null=True)
     keywords = models.ManyToManyField(Keyword, blank=True)
     capacity = models.IntegerField()
     schedule_day = models.IntegerField(choices=SCHEDULE_DAYS)
@@ -43,7 +43,7 @@ class Class(models.Model):
         else:
             return False
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
     class Meta:
@@ -57,7 +57,7 @@ class ClassOccurrence(models.Model):
     students_enrolled = models.ManyToManyField(CustomUser, blank=True, related_name='class_occurrence_students_enrolled')
     cancelled = models.BooleanField(default=False)
 
-    def __str__(self):
+    def _str_(self):
         return f'{self.class_obj.name} occurrence'
 
     class Meta:

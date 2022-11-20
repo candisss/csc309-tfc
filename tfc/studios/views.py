@@ -1,23 +1,19 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-import haversine as hs
 import decimal
 
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets
+from datetime import date
+
+import haversine as hs
+from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from studios.serializers import StudioInfoSerializer
-
-from studios.models import Studio
-
-from studios.models import Amenities
-
-from studios.models import Images
-
-from studios.serializers import DistanceSerializer
+from classes.models import ClassOccurrence
+from classes.serializers import ClassOccurrenceSerializer
+from studios.models import Amenities, Images, Studio
+from studios.serializers import DistanceSerializer, StudioInfoSerializer
 
 # from studios.serializers import StudioSearchSerializer
 
@@ -46,6 +42,10 @@ class StudioInfoView(generics.GenericAPIView):
                 temp = {'image': item.image.url}
                 images_list.append(temp)
 
+            class_occurrences = ClassOccurrence.objects.filter(class_obj_studio=studio).exclude(cancelled=True).filter(date_gte=date.today()) \
+                .order_by('date', 'class_obj__start_time')
+            class_occurrences_serializer = ClassOccurrenceSerializer(class_occurrences, many=True)
+
             data = {'name': studio.name,
                     'address': studio.address,
                     'latitude': studio.latitude,
@@ -53,7 +53,8 @@ class StudioInfoView(generics.GenericAPIView):
                     'postal_code': studio.postal_code,
                     'phone_num': studio.phone_num,
                     'amenities': amenities_list,
-                    'images': images_list
+                    'images': images_list,
+                    'classes': class_occurrences_serializer.data
                     }
             return Response(data)
 
@@ -71,7 +72,7 @@ class ListbyDistanceView(generics.GenericAPIView):
             studio_loc = (studio.latitude, studio.longitude)
             temp = hs.haversine(user_loc, studio_loc)
             distance.append(temp)
-        sorted_studios = [x for _,x in sorted(zip(distance, Studio.objects.all()))]
+        sorted_studios = [x for _, x in sorted(zip(distance, Studio.objects.all()))]
         studio_list = []
         for i in range(len(sorted_studios)):
             temp = {'name': sorted_studios[i].name,
@@ -107,4 +108,5 @@ class StudioSearchFilterView(generics.ListAPIView):
             queryset = queryset.filter(class_studio__name=class_name)
 
         return queryset
+
 
