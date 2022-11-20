@@ -90,41 +90,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-# class LoginSerializer(serializers.Serializer):
-#     # class Meta:
-#     #     model = CustomUser
-#     #     fields = ['username', 'password']
-#     username = serializers.CharField()
-#     password = serializers.CharField()
-#
-#     def validate(self, data):
-#         username = data.get('username')
-#         password = data.get('password')
-#
-#         if not username:
-#             raise serializers.ValidationError("Username is required")
-#         if not password:
-#             raise serializers.ValidationError("Password is required")
-#
-#         user = CustomUser.objects.filter(username=username)
-#         if user.exists() and user.count() == 1:
-#             user_obj = user.first()
-#         else:
-#             raise serializers.ValidationError(
-#                 "This username/email is not valid.")
-#
-#         if user_obj:
-#             if not user_obj.check_password(password):
-#                 raise serializers.ValidationError("Invalid credentials.")
-#
-#         data['user'] = user_obj
-#         return data
-
 class EditProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['email']
+        fields = ['email', 'first_name', 'last_name', 'phone_num', 'avatar']
 
     def validate_email(self, data):
         email = data
@@ -133,7 +103,21 @@ class EditProfileSerializer(serializers.ModelSerializer):
             validator(email)
         return email
 
+    def validate_phone_num(self, data):
+        phone_num = data
+        num_regex = re.compile(
+            '^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$')
+        if not num_regex.match(phone_num):
+            raise serializers.ValidationError('Enter a valid phone number.')
+        return phone_num
+
     def update(self, instance, validated_data):
         instance.email = validated_data['email']
+        instance.first_name = validated_data['first_name']
+        instance.last_name = validated_data['last_name']
+        instance.phone_num = validated_data['phone_num']
+        instance.avatar = validated_data['avatar']
         instance.save()
         return instance
+
+

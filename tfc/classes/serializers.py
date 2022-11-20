@@ -6,7 +6,6 @@ from classes.models import Class, ClassOccurrence
 class ClassSerializer(serializers.ModelSerializer):
     schedule = serializers.SerializerMethodField()
     keywords = serializers.StringRelatedField(many=True)
-    coach = serializers.CharField()
 
     class Meta:
         model = Class
@@ -17,13 +16,17 @@ class ClassSerializer(serializers.ModelSerializer):
 
 
 class ClassOccurrenceSerializer(serializers.ModelSerializer):
-    class_name = serializers.StringRelatedField(source='class_obj')
+    name = serializers.StringRelatedField(source='class_obj')
+    description = serializers.StringRelatedField(source='class_obj.description')
+    coach = serializers.StringRelatedField(source='class_obj.coach')
+    keywords = serializers.StringRelatedField(source='class_obj.keywords', many=True)
+    capacity = serializers.StringRelatedField(source='class_obj.capacity')
     start_time = serializers.SerializerMethodField()
     end_time = serializers.SerializerMethodField()
 
     class Meta:
         model = ClassOccurrence
-        fields = ['class_name', 'date', 'start_time', 'end_time']
+        fields = ['name', 'description', 'coach', 'keywords', 'capacity', 'date', 'start_time', 'end_time']
 
     def get_start_time(self, obj):
         return obj.class_obj.start_time.strftime("%I:%M %p")
