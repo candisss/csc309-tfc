@@ -2,7 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import haversine as hs
 import decimal
-from rest_framework import generics
+
+import django_filters
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -15,6 +18,8 @@ from studios.models import Amenities
 from studios.models import Images
 
 from studios.serializers import DistanceSerializer
+
+# from studios.serializers import StudioSearchSerializer
 
 
 # Create your views here.
@@ -74,3 +79,32 @@ class ListbyDistanceView(generics.GenericAPIView):
             studio_list.append(temp)
         data = {'studio': studio_list}
         return Response(data)
+
+
+# class StudioFilter(django_filters.FilterSet):
+#     name = django_filters.CharFilter(field_name='name')
+#     amenities = django_filters.ChoiceFilter(choices=Amenities.type)
+#
+#     class Meta:
+#         model = Studio
+#         fields = ['name', 'amenities']
+
+class StudioSearchFilterView(generics.ListAPIView):
+    serializer_class = StudioInfoSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        queryset = Studio.objects.all()
+        name = self.request.query_params.get('name')
+        amenities = self.request.query_params.get('amenities')
+        class_name = self.request.query_params.get('class_name')
+
+        if name:
+            queryset = queryset.filter(name=name)
+        if amenities:
+            queryset = queryset.filter(amenities__type=amenities)
+        if class_name:
+            queryset = queryset.filter(class_studio__name=class_name)
+
+        return queryset
+
