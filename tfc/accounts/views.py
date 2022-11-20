@@ -58,7 +58,3 @@ class EditProfileView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EditProfileSerializer
 
-    # def post(self, request):
-    #     print(request.user)
-    #     return Response('test')
-
