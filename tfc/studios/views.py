@@ -99,6 +99,7 @@ class StudioSearchFilterView(generics.ListAPIView):
         name = self.request.query_params.get('name')
         amenities = self.request.query_params.get('amenities')
         class_name = self.request.query_params.get('class_name')
+        coach = self.request.query_params.get('coach')
 
         if name:
             queryset = queryset.filter(name=name)
@@ -106,6 +107,8 @@ class StudioSearchFilterView(generics.ListAPIView):
             queryset = queryset.filter(amenities__type=amenities)
         if class_name:
             queryset = queryset.filter(class_studio__name=class_name)
+        if coach:
+            queryset = queryset.filter(class_studio__coach=coach)
 
         return queryset
 

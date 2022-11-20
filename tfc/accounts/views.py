@@ -15,6 +15,9 @@ from rest_framework.views import APIView
 from accounts.models import CustomUser
 from accounts.serializers import RegisterSerializer, EditProfileSerializer
 
+from accounts.serializers import PasswordResetSerializer
+
+
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = (AllowAny,)
@@ -58,3 +61,19 @@ class EditProfileView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EditProfileSerializer
 
+
+class PasswordResetView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = PasswordResetSerializer
+
+    # def post(self, request):
+    #     serializer = PasswordResetSerializer(data=request.data,
+    #                                          context={'request': request})
+    #     serializer.is_valid(raise_exception=True)
+    #     new_password = serializer.validated_data.get('new_password')
+    #     user = request.user
+    #     user.set_password(new_password)
+    #     # serializer.user = user
+    #     serializer.save()
+    #     return Response("Reset successfully!", status=status.HTTP_200_OK)

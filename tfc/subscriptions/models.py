@@ -16,7 +16,7 @@ class Subscription(models.Model):
     term = models.CharField(max_length=10, choices=SUBSCRIPTION_LENGTH_CHOICES)
 
     def __str__(self):
-        return self.price, self.term
+        return self.term
 
 
 class PaymentCard(models.Model):
@@ -29,7 +29,7 @@ class PaymentCard(models.Model):
                              related_name='payment_cards')
 
     def __str__(self):
-        return self.card_holder_name, self.card_num
+        return self.card_holder_name
 
 
 class PaymentHistory(models.Model):
