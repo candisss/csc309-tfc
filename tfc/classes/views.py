@@ -1,14 +1,18 @@
 import json
 from datetime import datetime as dt
 
+from django.db.models import Q
 from rest_framework import generics, status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
 from classes.models import Class
 from classes.serializers import ClassOccurrenceSerializer
+
+from classes.models import ClassOccurrence
 
 
 class EnrollStudentsView(APIView):
@@ -149,3 +153,35 @@ class ClassScheduleView(generics.GenericAPIView):
         history_serializer = ClassOccurrenceSerializer(class_history, many=True)
 
         return self.get_paginated_response(self.paginate_queryset(history_serializer.data))
+
+
+class ClassSearchFilterView(generics.ListAPIView):
+    serializer_class = ClassOccurrenceSerializer
+    permission_classes = (IsAuthenticated,)
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        queryset = ClassOccurrence.objects.all()
+        studio_name = self.request.query_params.get('studio_name')
+        class_name = self.request.query_params.get('class_name')
+        coach = self.request.query_params.get('coach')
+        date = self.request.query_params.get('date')
+        start_time = self.request.query_params.get('start_time')
+        end_time = self.request.query_params.get('end_time')
+
+        if studio_name:
+            queryset = queryset.filter(class_obj__studio__name=studio_name)
+        if class_name:
+            queryset = queryset.filter(class_obj__name=class_name)
+        if coach:
+            queryset = queryset.filter(class_obj__coach=coach)
+        if date:
+            queryset = queryset.filter(date=date)
+        if start_time:
+            time_search = dt.strptime(start_time, '%H:%M %p').time()
+            queryset = queryset.filter(Q(class_obj__start_time__gte=time_search))
+        if end_time:
+            time_search = dt.strptime(end_time, '%H:%M %p').time()
+            queryset = queryset.filter(Q(class_obj__end_time__lte=time_search))
+
+        return queryset

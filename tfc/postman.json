@@ -246,10 +246,6 @@
 			]
 		},
 		{
-			"name": "Classes",
-			"item": []
-		},
-		{
 			"name": "Studios",
 			"item": [
 				{
@@ -791,14 +787,49 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Classes",
+			"item": [
 				{
-					"name": "Manage (admin only)",
+					"name": "Enrol in class",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "class_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "single",
+									"type": "text"
+								},
+								{
+									"key": "date",
+									"value": "2022-11-28",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/subscriptions/manage/",
+							"raw": "http://127.0.0.1:8000/classes/enroll/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -808,9 +839,198 @@
 							],
 							"port": "8000",
 							"path": [
-								"subscriptions",
-								"manage",
+								"classes",
+								"enroll",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Drop class for one occurrence",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "class_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "single",
+									"type": "text"
+								},
+								{
+									"key": "date",
+									"value": "2022-11-28",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/classes/drop/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"classes",
+								"drop",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class history",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/classes/history/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"classes",
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class schedule",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/classes/schedule/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"classes",
+								"schedule",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/classes/search/?studio_name=&class_name=&coach=&date=&start_time=&end_time=",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"classes",
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "studio_name",
+									"value": ""
+								},
+								{
+									"key": "class_name",
+									"value": ""
+								},
+								{
+									"key": "coach",
+									"value": ""
+								},
+								{
+									"key": "date",
+									"value": ""
+								},
+								{
+									"key": "start_time",
+									"value": ""
+								},
+								{
+									"key": "end_time",
+									"value": ""
+								}
 							]
 						}
 					},
