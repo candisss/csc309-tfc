@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2e2993df-8a8c-4ea1-8b17-88a239de55c6",
+		"_postman_id": "94b21827-39f7-4fe2-ace8-cae4ecf177a2",
 		"name": "Toronto Fitness Club",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24120315"
 	},
 	"item": [
 		{
@@ -246,7 +247,144 @@
 		},
 		{
 			"name": "Studios",
-			"item": []
+			"item": [
+				{
+					"name": "List studios by distance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "latitude",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "longitude",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/list/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List studio details by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQzMjQyLCJpYXQiOjE2NjkwMjUyNDIsImp0aSI6ImZjNjRmMzkyZjMwMDQ0OWI5ZDJhOWJhZjcwZGE1NmUwIiwidXNlcl9pZCI6Mn0.4plsCUkFYo5Ca4zwj2kTQLNWraw-y3K6c6RBlfTd_p8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/1/info/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"1",
+								"info",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search and filter",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/search/?name=&amenities&class_name=&coach=",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "amenities",
+									"value": null
+								},
+								{
+									"key": "class_name",
+									"value": ""
+								},
+								{
+									"key": "coach",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Subscriptions",
