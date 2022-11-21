@@ -127,10 +127,16 @@ class ManageView(APIView):
         users = CustomUser.objects.all()
         for user in users:
             if user.subscribed and user.next_payment_date.date() == datetime.today().date():
-                charge(user.payment_card)
-                generate_history(user.subscription.price, user.payment_card,
-                                 user)
-                update_next_payment_time(user)
+                result = charge(user.payment_card)
+                if result:
+                    generate_history(user.subscription.price, user.payment_card,
+                                     user)
+                    update_next_payment_time(user)
+                else:
+                    user.subscription = None
+                    user.subscribed = False
+                    user.next_payment_date = None
+                    user.save()
         return Response("Managed Successfully", status=200)
 
 
