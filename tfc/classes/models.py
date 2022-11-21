@@ -8,7 +8,7 @@ from studios.models import Studio
 class Keyword(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -43,7 +43,7 @@ class Class(models.Model):
         else:
             return False
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -57,7 +57,7 @@ class ClassOccurrence(models.Model):
     students_enrolled = models.ManyToManyField(CustomUser, blank=True, related_name='class_occurrence_students_enrolled')
     cancelled = models.BooleanField(default=False)
 
-    def _str_(self):
+    def __str__(self):
         return f'{self.class_obj.name} occurrence'
 
     class Meta:
