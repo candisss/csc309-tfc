@@ -1,7 +1,8 @@
 import json
 from datetime import datetime as dt
 
-from rest_framework import status
+from rest_framework import generics, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -130,19 +131,21 @@ class DropStudentsView(APIView):
         return Response(response_msg, response_code)
 
 
-class ClassHistoryView(APIView):
+class ClassHistoryView(generics.GenericAPIView):
+    pagination_class = PageNumberPagination
     def get(self, request, *args, **kwargs):
         user = request.user
         class_history = user.class_occurrence_students_enrolled.exclude(cancelled=True).filter(date__lt=dt.now()).order_by('date')
         history_serializer = ClassOccurrenceSerializer(class_history, many=True)
 
-        return Response({'History': history_serializer.data})
+        return self.get_paginated_response(self.paginate_queryset(history_serializer.data))
 
 
-class ClassScheduleView(APIView):
+class ClassScheduleView(generics.GenericAPIView):
+    pagination_class = PageNumberPagination
     def get(self, request, *args, **kwargs):
         user = request.user
         class_history = user.class_occurrence_students_enrolled.exclude(cancelled=True).filter(date__gte=dt.now()).order_by('date')
         history_serializer = ClassOccurrenceSerializer(class_history, many=True)
 
-        return Response({'Schedule': history_serializer.data})
+        return self.get_paginated_response(self.paginate_queryset(history_serializer.data))
