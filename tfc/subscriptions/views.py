@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
+from classes.models import ClassOccurrence
 from subscriptions.models import PaymentHistory, Subscription
 from subscriptions.serializers import PaymentCardSerializer, \
     PaymentHistorySerializer, \
@@ -95,6 +96,13 @@ class CancelSubscriptionView(APIView):
         user.subscribed = False
         user.next_payment_date = None
         user.save()
+        classes_enrolled = ClassOccurrence.objects.exclude(cancelled=True).filter(
+            date__gte=datetime.date.today()).filter(students_enrolled__in=[user])
+        for occurrences in classes_enrolled:
+            students_enrolled = occurrences.students_enrolled
+            if user in students_enrolled.all():
+                students_enrolled.remove(user)
+
         return Response("Subscription Cancelled Successfully", status=200)
 
 
