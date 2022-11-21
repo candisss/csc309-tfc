@@ -79,6 +79,9 @@ class CancelSubscriptionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        # cancel classes after user.next_payment_date
+
+        # remove sub from user
         user = request.user
         user.subscription = None
         user.subscribed = False
