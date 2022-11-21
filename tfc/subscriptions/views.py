@@ -41,6 +41,7 @@ class SubscribeView(APIView):
 
     def post(self, request):
         try:
+            print(Subscription.objects.get(id=request.data.get('subscription_id')))
             Subscription.objects.get(id=request.data.get('subscription_id'))
         except Exception:
             return Response("No Subscription Found", status=404)

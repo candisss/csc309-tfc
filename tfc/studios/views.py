@@ -58,9 +58,13 @@ class ListbyDistanceView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        lat = decimal.Decimal(float(request.POST.get('latitude')))
-        lon = decimal.Decimal(float(request.POST.get('longitude')))
-        user_loc = (lat, lon)
+
+        if request.POST.get('latitude') and request.POST.get('longitude'):
+            lat = decimal.Decimal(float(request.POST.get('latitude')))
+            lon = decimal.Decimal(float(request.POST.get('longitude')))
+            user_loc = (lat, lon)
+        else:
+            return Response("Charge Failed", status=400)
         distance = []
         for studio in Studio.objects.all():
             studio_loc = (studio.latitude, studio.longitude)
