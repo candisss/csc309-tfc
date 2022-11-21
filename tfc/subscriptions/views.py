@@ -88,21 +88,19 @@ class CancelSubscriptionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # cancel classes after user.next_payment_date
-
-        # remove sub from user
         user = request.user
-        user.subscription = None
-        user.subscribed = False
-        user.next_payment_date = None
-        user.save()
+        # cancel classes after user.next_payment_date
         classes_enrolled = ClassOccurrence.objects.exclude(cancelled=True).filter(
             date__gte=datetime.date.today()).filter(students_enrolled__in=[user])
         for occurrences in classes_enrolled:
             students_enrolled = occurrences.students_enrolled
             if user in students_enrolled.all():
                 students_enrolled.remove(user)
-
+        # remove sub from user
+        user.subscription = None
+        user.subscribed = False
+        user.next_payment_date = None
+        user.save()
         return Response("Subscription Cancelled Successfully", status=200)
 
 
