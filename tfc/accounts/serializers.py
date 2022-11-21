@@ -96,14 +96,14 @@ class EditProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Enter a valid phone number.')
         return phone_num
 
-    def update(self, instance, validated_data):
-        instance.email = validated_data['email']
-        instance.first_name = validated_data['first_name']
-        instance.last_name = validated_data['last_name']
-        instance.phone_num = validated_data['phone_num']
-        instance.avatar = validated_data['avatar']
-        instance.save()
-        return instance
+    # def update(self, instance, validated_data):
+    #     instance.email = validated_data['email']
+    #     instance.first_name = validated_data['first_name']
+    #     instance.last_name = validated_data['last_name']
+    #     instance.phone_num = validated_data['phone_num']
+    #     instance.avatar = validated_data['avatar']
+    #     instance.save()
+    #     return instance
 
 
 class PasswordResetSerializer(serializers.ModelSerializer):
@@ -130,11 +130,11 @@ class PasswordResetSerializer(serializers.ModelSerializer):
                                                            "match."})
         return data
 
-    def update(self, instance, validated_data):
-
-        instance.set_password(validated_data['password'])
-        instance.save()
-
-        return instance
+    # def update(self, instance, validated_data):
+    #
+    #     instance.set_password(validated_data['password'])
+    #     instance.save()
+    #
+    #     return instance
 
 

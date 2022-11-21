@@ -6,6 +6,207 @@
 	},
 	"item": [
 		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Register account",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Jane",
+									"type": "default"
+								},
+								{
+									"key": "last_name",
+									"value": "Doe",
+									"type": "default"
+								},
+								{
+									"key": "username",
+									"value": "jdoe",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "jdoe@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "phone_num",
+									"value": "6473829403",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "testtest",
+									"type": "default"
+								},
+								{
+									"key": "password2",
+									"value": "testtest",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/register/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "jdoe",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "testtesttest",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit profile",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "jdoe@outlook.com",
+									"type": "default"
+								},
+								{
+									"key": "phone_num",
+									"value": "4163940293",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/edit/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "old_password",
+									"value": "testtesttest",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "testtest",
+									"type": "default"
+								},
+								{
+									"key": "password2",
+									"value": "testtest",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/password/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"password",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Studios",
+			"item": []
+		},
+		{
 			"name": "Subscriptions",
 			"item": [
 				{
@@ -415,7 +616,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDMwMTkxLCJpYXQiOjE2NjkwMTIxOTEsImp0aSI6ImZiNWY3OTVjZWQ1MjQxMWZiMDM0NDEyNzIxMzBkNDAwIiwidXNlcl9pZCI6MX0.yt_7r6RKbdZ8Utr6IhNgignnxHixmCtnGSRJa_-MiFg",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQ2Mjg2LCJpYXQiOjE2NjkwMjgyODYsImp0aSI6ImMwMWMxZjRiYWVhYTQ4MTFhODgxMzVmYmUyMzFlNmMyIiwidXNlcl9pZCI6NH0.YqprRAXIifHK1Iob8Lc6ZRCPIwHJ5obzPAQPI03CA6g",
 				"type": "string"
 			}
 		]

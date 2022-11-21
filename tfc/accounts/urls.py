@@ -8,6 +8,6 @@ app_name = 'accounts'
 urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('edit/<int:pk>/', EditProfileView.as_view(), name='edit_profile'),
-    path('password/<int:pk>/', PasswordResetView.as_view(), name='reset_password')
+    path('edit/', EditProfileView.as_view(), name='edit_profile'),
+    path('password/', PasswordResetView.as_view(), name='reset_password')
 ]
