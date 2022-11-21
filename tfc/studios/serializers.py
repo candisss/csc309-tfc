@@ -11,6 +11,15 @@ class StudioInfoSerializer(serializers.ModelSerializer):
 
 
 class DistanceSerializer(serializers.Serializer):
-    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
-    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=True)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=True)
 
+    def validate_latitude(self, data):
+        lat = data
+        if lat < -90 or lat > 90:
+            raise serializers.ValidationError('Enter a valid latitude.')
+
+    def validate_longitude(self, data):
+        lon = data
+        if lon < -90 or lon > 90:
+            raise serializers.ValidationError('Enter a valid longitude.')

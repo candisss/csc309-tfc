@@ -58,8 +58,10 @@ class ListbyDistanceView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        lat = decimal.Decimal(float(request.POST.get('latitude')))
-        lon = decimal.Decimal(float(request.POST.get('longitude')))
+        serializer = DistanceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        lat = serializer.data.latitude
+        lon = serializer.data.latitude
         user_loc = (lat, lon)
         distance = []
         for studio in Studio.objects.all():

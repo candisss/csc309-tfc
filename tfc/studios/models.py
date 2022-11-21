@@ -22,6 +22,9 @@ class Studio(models.Model):
             '^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$')
         postal_regex = re.compile('[A-Z]{1}[0-9]{1}[A-Z]{1}\s*[0-9]{1}[A-Z]{1}['
                                   '0-9]{1}')
+        if self.latitude < -90 or self.latitude > 90 or self.longitude < -180 \
+                or self.longitude > 180:
+            raise forms.ValidationError('Enter a geolocation.')
         if not phone_regex.match(self.phone_num):
             raise forms.ValidationError('Enter a valid phone number.')
         if not postal_regex.match(self.postal_code):
