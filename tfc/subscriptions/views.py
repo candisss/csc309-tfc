@@ -1,10 +1,10 @@
-from datetime import datetime
+import datetime
 from dateutil import relativedelta
 
 from django.shortcuts import render
 from rest_framework.generics import DestroyAPIView, RetrieveAPIView, \
     ListAPIView, CreateAPIView, \
-    RetrieveUpdateDestroyAPIView, UpdateAPIView
+    RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from django.views.generic import TemplateView, ListView
 from django.shortcuts import get_object_or_404
@@ -39,12 +39,17 @@ class SubscriptionsView(ListAPIView):
 class SubscribeView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self):
-        if not Subscription.objects.filter(id=self.kwargs['subscription_id']).exists():
+    def post(self, request):
+        try:
+            Subscription.objects.get(id=request.data.get('subscription_id'))
+        except Exception:
             return Response("No Subscription Found", status=404)
-        if not self.request.user.payment_card.exists():
+        try:
+            self.request.user.payment_card
+        except Exception:
             return Response("No Payment Card Found", status=404)
-        subscription = Subscription.objects.filter(id=self.kwargs['subscription_id'])
+        subscription = Subscription.objects.get(
+            id=request.data.get('subscription_id'))
         user = self.request.user
         if charge(user.payment_card):
             user.subscription = subscription
@@ -63,14 +68,18 @@ class CheckSubscriptionView(RetrieveAPIView):
     serializer_class = SubscriptionSerializer
 
     def get_object(self):
+        try:
+            self.request.user.subscription
+        except Exception:
+            return Response("User not subscribed", status=404)
         return self.request.user.subscription
 
 
 class CancelSubscriptionView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self):
-        user = self.request.user
+    def post(self, request):
+        user = request.user
         user.subscription = None
         user.subscribed = False
         user.next_payment_date = None
@@ -83,33 +92,46 @@ class CreateSubscriptionView(CreateAPIView):
     serializer_class = SubscriptionSerializer
 
 
-class PaymentHistoryView(RetrieveAPIView):
+class PaymentHistoryView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PaymentHistorySerializer
 
-    def get_object(self):
-        return self.request.user.payment_histories
+    def get_queryset(self):
+        return self.request.user.payment_histories.all()
 
 
-class PaymentCardView(RetrieveUpdateDestroyAPIView):
+class PaymentCardView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PaymentCardSerializer
 
     def get_object(self):
+        try:
+            self.request.user.payment_card
+        except Exception:
+            return Response("No card found", status=404)
         return self.request.user.payment_card
+
+
+class CreatePaymentCardView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PaymentCardSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class ManageView(APIView):
     permission_classes = [IsAdminUser]
 
-    def post(self):
+    def post(self, request):
         users = CustomUser.objects.all()
         for user in users:
             if user.subscribed and user.next_payment_date.date() == datetime.today().date():
                 charge(user.payment_card)
-                generate_history(user.subscription.price, user.payment_card, user)
+                generate_history(user.subscription.price, user.payment_card,
+                                 user)
                 update_next_payment_time(user)
-        return Response("Subscription Cancelled Successfully", status=200)
+        return Response("Managed Successfully", status=200)
 
 
 def charge(payment_card):
@@ -118,18 +140,23 @@ def charge(payment_card):
 
 
 def generate_history(amount, card, user):
-    payment_history = PaymentHistory(amount_paid=amount, payment_card=card, user=user)
+    payment_history = PaymentHistory(amount_paid=amount, payment_card=card,
+                                     user=user)
     payment_history.save()
 
 
 def update_next_payment_time(user):
-    if user.subscription.term == "Year":
-        user.next_payment_date = datetime.date.today() + relativedelta.relativedelta(
+    if user.next_payment_date is None:
+        date = datetime.date.today()
+    else:
+        date = user.next_payment_date
+    if user.subscription.term == "YEAR":
+        user.next_payment_date = date + relativedelta.relativedelta(
             months=1)
         user.save()
-    elif user.subscription.term == "Month":
-        user.next_payment_date = datetime.date.today() + relativedelta.relativedelta(
+    elif user.subscription.term == "MONTH":
+        user.next_payment_date = date + relativedelta.relativedelta(
             years=1)
         user.save()
     else:
-        raise AttributeError()
+        raise AttributeError("No Subscription Term Found")

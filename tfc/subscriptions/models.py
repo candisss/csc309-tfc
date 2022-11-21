@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import CASCADE
+from django.db.models import CASCADE, SET_NULL
 
 from accounts.models import CustomUser
 
@@ -16,7 +16,7 @@ class Subscription(models.Model):
     term = models.CharField(max_length=10, choices=SUBSCRIPTION_LENGTH_CHOICES)
 
     def __str__(self):
-        return self.term
+        return str(self.price) + str(self.term)
 
 
 class PaymentCard(models.Model):
@@ -29,15 +29,15 @@ class PaymentCard(models.Model):
                                 related_name='payment_card')
 
     def __str__(self):
-        return self.card_holder_name
+        return str(self.card_holder_name) + str(self.card_num)
 
 
 class PaymentHistory(models.Model):
     amount_paid = models.CharField(max_length=50)
-    payment_card = models.CharField(max_length=50)
+    payment_card = models.ForeignKey(to=PaymentCard, on_delete=SET_NULL, null=True, blank=True, related_name='payment_card')
     datetime = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(to=CustomUser, on_delete=CASCADE,
                              related_name='payment_histories')
 
     def __str__(self):
-        return self.amount_paid, self.datetime.__str__()
+        return str(self.amount_paid) + self.datetime.__str__()
