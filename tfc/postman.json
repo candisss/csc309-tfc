@@ -246,6 +246,10 @@
 			]
 		},
 		{
+			"name": "Classes",
+			"item": []
+		},
+		{
 			"name": "Studios",
 			"item": [
 				{
@@ -782,6 +786,30 @@
 							"path": [
 								"subscriptions",
 								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage (admin only)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/subscriptions/manage/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"subscriptions",
+								"manage",
 								""
 							]
 						}

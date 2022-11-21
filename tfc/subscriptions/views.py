@@ -146,7 +146,7 @@ class ManageView(APIView):
     def post(self, request):
         users = CustomUser.objects.all()
         for user in users:
-            if user.subscribed and user.next_payment_date.date() == datetime.today().date():
+            if user.subscribed and user.next_payment_date == datetime.date.today():
                 result = charge(user.payment_card)
                 if result:
                     generate_history(user.subscription.price, user.payment_card,
