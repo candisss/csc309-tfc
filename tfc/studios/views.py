@@ -36,7 +36,7 @@ class StudioInfoView(generics.GenericAPIView):
                 temp = {'image': item.image.url}
                 images_list.append(temp)
 
-            class_occurrences = ClassOccurrence.objects.filter(class_obj_studio=studio).exclude(cancelled=True).filter(date_gte=date.today()) \
+            class_occurrences = ClassOccurrence.objects.filter(class_obj__studio=studio).exclude(cancelled=True).filter(date__gte=date.today()) \
                 .order_by('date', 'class_obj__start_time')
             class_occurrences_serializer = ClassOccurrenceSerializer(class_occurrences, many=True)
 
