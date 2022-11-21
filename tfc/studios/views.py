@@ -1,8 +1,4 @@
 import decimal
-
-import django_filters
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, viewsets
 from datetime import date
 
 import haversine as hs
@@ -14,8 +10,6 @@ from classes.models import ClassOccurrence
 from classes.serializers import ClassOccurrenceSerializer
 from studios.models import Amenities, Images, Studio
 from studios.serializers import DistanceSerializer, StudioInfoSerializer
-
-# from studios.serializers import StudioSearchSerializer
 
 
 # Create your views here.
@@ -82,14 +76,6 @@ class ListbyDistanceView(generics.GenericAPIView):
         return Response(data)
 
 
-# class StudioFilter(django_filters.FilterSet):
-#     name = django_filters.CharFilter(field_name='name')
-#     amenities = django_filters.ChoiceFilter(choices=Amenities.type)
-#
-#     class Meta:
-#         model = Studio
-#         fields = ['name', 'amenities']
-
 class StudioSearchFilterView(generics.ListAPIView):
     serializer_class = StudioInfoSerializer
     permission_classes = (AllowAny,)
@@ -99,6 +85,7 @@ class StudioSearchFilterView(generics.ListAPIView):
         name = self.request.query_params.get('name')
         amenities = self.request.query_params.get('amenities')
         class_name = self.request.query_params.get('class_name')
+        coach = self.request.query_params.get('coach')
 
         if name:
             queryset = queryset.filter(name=name)
@@ -106,6 +93,8 @@ class StudioSearchFilterView(generics.ListAPIView):
             queryset = queryset.filter(amenities__type=amenities)
         if class_name:
             queryset = queryset.filter(class_studio__name=class_name)
+        if coach:
+            queryset = queryset.filter(class_studio__coach=coach)
 
         return queryset
 

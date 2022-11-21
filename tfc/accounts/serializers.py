@@ -1,27 +1,12 @@
 import re
-
-from django.contrib.auth import authenticate
-from django.db import models
-
 from django.core.validators import EmailValidator
 from rest_framework import serializers
 
 from accounts.models import CustomUser
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
 
-
-# class CustomUserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = CustomUser
-#         fields = ['id', 'first_name', 'last_name', 'username', 'email',
-#                   'phone_num', 'subscribed']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    # password = serializers.CharField(required=True)
-    # password2 = serializers.CharField(required=True)
 
     class Meta:
         model = CustomUser
@@ -118,6 +103,35 @@ class EditProfileSerializer(serializers.ModelSerializer):
         instance.phone_num = validated_data['phone_num']
         instance.avatar = validated_data['avatar']
         instance.save()
+        return instance
+
+
+class PasswordResetSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
+    old_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ('old_password', 'password', 'password2')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({"old_password": "Old password is not correct"})
+        return value
+
+    def update(self, instance, validated_data):
+
+        instance.set_password(validated_data['password'])
+        instance.save()
+
         return instance
 
 
