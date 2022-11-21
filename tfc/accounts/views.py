@@ -13,7 +13,7 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-class EditProfileView(generics.UpdateAPIView):
+class EditProfileView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = EditProfileSerializer

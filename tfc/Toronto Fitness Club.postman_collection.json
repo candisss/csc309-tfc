@@ -93,7 +93,7 @@
 								},
 								{
 									"key": "password",
-									"value": "testtesttest",
+									"value": "testtest",
 									"type": "default"
 								}
 							]
@@ -121,6 +121,48 @@
 					"name": "Edit profile",
 					"request": {
 						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "jdoe@icloud.com",
+									"type": "default"
+								},
+								{
+									"key": "phone_num",
+									"value": "4163940293",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/edit/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "formdata",
@@ -166,17 +208,17 @@
 							"formdata": [
 								{
 									"key": "old_password",
-									"value": "testtesttest",
+									"value": "testtest",
 									"type": "default"
 								},
 								{
 									"key": "password",
-									"value": "testtest",
+									"value": "testtesttest",
 									"type": "default"
 								},
 								{
 									"key": "password2",
-									"value": "testtest",
+									"value": "testtesttest",
 									"type": "default"
 								}
 							]
@@ -490,7 +532,7 @@
 							"formdata": [
 								{
 									"key": "price",
-									"value": "16",
+									"value": "99",
 									"type": "default"
 								},
 								{
@@ -616,7 +658,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQ2Mjg2LCJpYXQiOjE2NjkwMjgyODYsImp0aSI6ImMwMWMxZjRiYWVhYTQ4MTFhODgxMzVmYmUyMzFlNmMyIiwidXNlcl9pZCI6NH0.YqprRAXIifHK1Iob8Lc6ZRCPIwHJ5obzPAQPI03CA6g",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5MDQ4NjcyLCJpYXQiOjE2NjkwMzA2NzIsImp0aSI6IjAxYzcxYWM0ZjNhYjRmNDU5YzhkMGM3Mjk0ZTZmYjJlIiwidXNlcl9pZCI6N30.XjnWfGa7cbUl16Z-e4GKRL2uMZVaNmKZek55QhBUvKk",
 				"type": "string"
 			}
 		]
