@@ -143,6 +143,13 @@ class ManageView(APIView):
         return Response("Managed Successfully", status=200)
 
 
+class NextPaymentDateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        return Response(user.next_payment_date.__str__(), status=200)
+
 def charge(payment_card):
     # a fake charge card func that always returns true
     return True
