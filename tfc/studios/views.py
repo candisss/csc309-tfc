@@ -1,8 +1,7 @@
 import decimal
-from datetime import date, datetime as dt
+from datetime import date
 
 import haversine as hs
-from django.db.models import Q
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -19,7 +18,6 @@ class StudioInfoView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, studio_id):
-        search = request.GET.get('search')
         if not Studio.objects.filter(id=studio_id).exists():
             return Response('NOT FOUND', status=404)
         else:
@@ -38,25 +36,7 @@ class StudioInfoView(generics.GenericAPIView):
                 temp = {'image': item.image.url}
                 images_list.append(temp)
 
-            if search is not None:
-                search_query = Q(class_obj__name__icontains=search) | Q(class_obj__coach__icontains=search)
-                try:
-                    date_search = dt.strptime(search, '%Y-%m-%d')
-                    search_query = search_query | Q(date=date_search)
-                except ValueError:
-                    pass
-                try:
-                    time_search = dt.strptime(search, '%H:%M').time()
-                    search_query = search_query | Q(class_obj__start_time__lte=time_search,
-                                                    class_obj__end_time__gte=time_search)
-                except ValueError:
-                    pass
-
-            else:
-                search_query = Q()
-
-            class_occurrences = ClassOccurrence.objects.filter(class_obj__studio=studio).filter(search_query).exclude(
-                cancelled=True).filter(date__gte=date.today()) \
+            class_occurrences = ClassOccurrence.objects.filter(class_obj_studio=studio).exclude(cancelled=True).filter(date_gte=date.today()) \
                 .order_by('date', 'class_obj__start_time')
             class_occurrences_serializer = ClassOccurrenceSerializer(class_occurrences, many=True)
 
@@ -78,8 +58,10 @@ class ListbyDistanceView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        lat = decimal.Decimal(float(request.POST.get('latitude')))
-        lon = decimal.Decimal(float(request.POST.get('longitude')))
+        serializer = DistanceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        lat = serializer.data.latitude
+        lon = serializer.data.latitude
         user_loc = (lat, lon)
         distance = []
         for studio in Studio.objects.all():
@@ -117,4 +99,5 @@ class StudioSearchFilterView(generics.ListAPIView):
             queryset = queryset.filter(class_studio__coach=coach)
 
         return queryset
+
 
