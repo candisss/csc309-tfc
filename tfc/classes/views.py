@@ -178,7 +178,7 @@ class ClassSearchFilterView(generics.ListAPIView):
         if date:
             queryset = queryset.filter(date=date)
         if start_time:
-            time_search = dt.strptime(start_time, '%H:%M %p').time()
+            time_search = dt.strptime(start_time, '%I:%M %p').time()
             queryset = queryset.filter(Q(class_obj__start_time__gte=time_search))
         if end_time:
             time_search = dt.strptime(end_time, '%H:%M %p').time()

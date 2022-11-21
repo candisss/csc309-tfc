@@ -39,26 +39,6 @@ class StudioInfoView(generics.GenericAPIView):
             for item in all_images:
                 temp = {'image': item.image.url}
                 images_list.append(temp)
-            # if search is not None:
-            #     search_query = Q(class_obj__name__icontains=search) | Q(class_obj__coach__icontains=search)
-            #     try:
-            #         date_search = dt.strptime(search, '%Y-%m-%d')
-            #         search_query = search_query | Q(date=date_search)
-            #     except ValueError:
-            #         pass
-            #     try:
-            #         time_search = dt.strptime(search, '%H:%M').time()
-            #         search_query = search_query | Q(class_obj__start_time__lte=time_search,
-            #                                         class_obj__end_time__gte=time_search)
-            #     except ValueError:
-            #         pass
-            #
-            # else:
-            #     search_query = Q()
-
-            # class_occurrences = ClassOccurrence.objects.filter(class_obj__studio=studio).exclude(cancelled=True).filter(date__gte=date.today()) \
-            #     .order_by('date', 'class_obj__start_time')
-            class_occurrences_serializer = ClassOccurrenceSerializer(class_occurrences, many=True)
 
             data = {'name': studio.name,
                     'address': studio.address,
@@ -68,7 +48,6 @@ class StudioInfoView(generics.GenericAPIView):
                     'phone_num': studio.phone_num,
                     'amenities': amenities_list,
                     'images': images_list
-                    # 'classes': class_occurrences_serializer.data
                     }
             return Response(data)
 

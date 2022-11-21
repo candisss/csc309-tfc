@@ -977,7 +977,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Class search and filter",
 					"request": {
 						"auth": {
 							"type": "bearer",
