@@ -1,3 +1,5 @@
+import decimal
+
 from rest_framework import serializers
 
 from studios.models import Studio
@@ -15,11 +17,13 @@ class DistanceSerializer(serializers.Serializer):
     longitude = serializers.DecimalField(max_digits=9, decimal_places=6, required=True)
 
     def validate_latitude(self, data):
-        lat = data
+        lat = decimal.Decimal(data)
         if lat < -90 or lat > 90:
             raise serializers.ValidationError('Enter a valid latitude.')
+        return lat
 
     def validate_longitude(self, data):
-        lon = data
-        if lon < -90 or lon > 90:
+        lon = decimal.Decimal(data)
+        if lon < -180 or lon > 180:
             raise serializers.ValidationError('Enter a valid longitude.')
+        return lon

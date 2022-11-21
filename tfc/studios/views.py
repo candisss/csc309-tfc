@@ -3,6 +3,7 @@ from datetime import date
 
 import haversine as hs
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -16,6 +17,7 @@ from studios.serializers import DistanceSerializer, StudioInfoSerializer
 class StudioInfoView(generics.GenericAPIView):
     serializer_class = StudioInfoSerializer
     permission_classes = (AllowAny,)
+    pagination_class = PageNumberPagination
 
     def get(self, request, studio_id):
         if not Studio.objects.filter(id=studio_id).exists():
@@ -56,12 +58,14 @@ class StudioInfoView(generics.GenericAPIView):
 class ListbyDistanceView(generics.GenericAPIView):
     serializer_class = DistanceSerializer
     permission_classes = (AllowAny,)
+    pagination_class = PageNumberPagination
 
     def post(self, request):
         serializer = DistanceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        lat = serializer.data.latitude
-        lon = serializer.data.latitude
+        print(serializer)
+        lat = decimal.Decimal(serializer.data.get('latitude'))
+        lon = decimal.Decimal(serializer.data.get('longitude'))
         user_loc = (lat, lon)
         distance = []
         for studio in Studio.objects.all():
@@ -81,6 +85,7 @@ class ListbyDistanceView(generics.GenericAPIView):
 class StudioSearchFilterView(generics.ListAPIView):
     serializer_class = StudioInfoSerializer
     permission_classes = (AllowAny,)
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         queryset = Studio.objects.all()

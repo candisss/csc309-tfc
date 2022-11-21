@@ -2,9 +2,11 @@ import datetime
 from dateutil import relativedelta
 
 from django.shortcuts import render
-from rest_framework.generics import DestroyAPIView, RetrieveAPIView, \
+from rest_framework.generics import DestroyAPIView, GenericAPIView, \
+    RetrieveAPIView, \
     ListAPIView, CreateAPIView, \
     RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from django.views.generic import TemplateView, ListView
 from django.shortcuts import get_object_or_404
@@ -22,6 +24,8 @@ from subscriptions.serializers import PaymentCardSerializer, \
 class SubscriptionView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = SubscriptionSerializer
+    pagination_class = PageNumberPagination
+
 
     def get_object(self):
         return get_object_or_404(Subscription,
@@ -31,6 +35,7 @@ class SubscriptionView(RetrieveUpdateDestroyAPIView):
 class SubscriptionsView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = SubscriptionSerializer
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         return Subscription.objects.all()
@@ -67,6 +72,8 @@ class SubscribeView(APIView):
 class CheckSubscriptionView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = SubscriptionSerializer
+    pagination_class = PageNumberPagination
+
 
     def get_object(self):
         try:
@@ -99,6 +106,8 @@ class CreateSubscriptionView(CreateAPIView):
 class PaymentHistoryView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PaymentHistorySerializer
+    pagination_class = PageNumberPagination
+
 
     def get_queryset(self):
         return self.request.user.payment_histories.all()
@@ -107,6 +116,7 @@ class PaymentHistoryView(ListAPIView):
 class PaymentCardView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PaymentCardSerializer
+    pagination_class = PageNumberPagination
 
     def get_object(self):
         try:
@@ -144,8 +154,9 @@ class ManageView(APIView):
         return Response("Managed Successfully", status=200)
 
 
-class NextPaymentDateView(APIView):
+class NextPaymentDateView(GenericAPIView):
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
     def get(self, request):
         user = request.user

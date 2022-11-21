@@ -115,17 +115,20 @@ class PasswordResetSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('old_password', 'password', 'password2')
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-
-        return attrs
-
-    def validate_old_password(self, value):
+    def validate_old_password(self, data):
         user = self.context['request'].user
-        if not user.check_password(value):
-            raise serializers.ValidationError({"old_password": "Old password is not correct"})
-        return value
+        if not user.check_password(data):
+            raise serializers.ValidationError({"old_password": "Old password "
+                                                               "is "
+                                                               "incorrect"})
+        return data
+
+    def validate(self, data):
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError({"password": "The two password "
+                                                           "fields didn't "
+                                                           "match."})
+        return data
 
     def update(self, instance, validated_data):
 
