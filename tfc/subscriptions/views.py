@@ -91,7 +91,7 @@ class CancelSubscriptionView(APIView):
         user = request.user
         # cancel classes after user.next_payment_date
         classes_enrolled = ClassOccurrence.objects.exclude(cancelled=True).filter(
-            date__gte=datetime.date.today()).filter(students_enrolled__in=[user])
+            date__gte=user.next_payment_date).filter(students_enrolled__in=[user])
         for occurrences in classes_enrolled:
             students_enrolled = occurrences.students_enrolled
             if user in students_enrolled.all():
