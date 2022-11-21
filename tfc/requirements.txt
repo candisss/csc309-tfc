@@ -28,3 +28,4 @@ shortuuid==1.0.10
 sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
 urllib3==1.26.12
 validators==0.20.0
+virtualenv==20.16.7
