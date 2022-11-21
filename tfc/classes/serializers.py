@@ -16,7 +16,7 @@ class ClassSerializer(serializers.ModelSerializer):
 
 
 class ClassOccurrenceSerializer(serializers.ModelSerializer):
-    name = serializers.StringRelatedField(source='class_obj')
+    name = serializers.StringRelatedField(source='class_obj.name')
     description = serializers.StringRelatedField(source='class_obj.description')
     coach = serializers.StringRelatedField(source='class_obj.coach')
     keywords = serializers.StringRelatedField(source='class_obj.keywords', many=True)

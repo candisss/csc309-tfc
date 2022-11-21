@@ -11,7 +11,6 @@ class ClassAdmin(admin.ModelAdmin):
 
     actions = ['create_class_occurrences', 'cancel_all_occurrences', 'cancel_occurrences']
 
-    actions = ['cancel_occurrences']
 
     def cancel_all_occurrences(self, request, queryset):
         queryset.exclude(cancelled=True).filter(date__gte=date.today()).update(cancelled=True)

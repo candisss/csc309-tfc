@@ -36,7 +36,7 @@ class StudioInfoView(generics.GenericAPIView):
                 temp = {'image': item.image.url}
                 images_list.append(temp)
 
-            class_occurrences = ClassOccurrence.objects.filter(class_obj__studio=studio).exclude(cancelled=True).filter(date__gte=date.today()) \
+            class_occurrences = ClassOccurrence.objects.filter(class_obj_studio=studio).exclude(cancelled=True).filter(date_gte=date.today()) \
                 .order_by('date', 'class_obj__start_time')
             class_occurrences_serializer = ClassOccurrenceSerializer(class_occurrences, many=True)
 
@@ -58,13 +58,9 @@ class ListbyDistanceView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-
-        if request.POST.get('latitude') and request.POST.get('longitude'):
-            lat = decimal.Decimal(float(request.POST.get('latitude')))
-            lon = decimal.Decimal(float(request.POST.get('longitude')))
-            user_loc = (lat, lon)
-        else:
-            return Response("Charge Failed", status=400)
+        lat = decimal.Decimal(float(request.POST.get('latitude')))
+        lon = decimal.Decimal(float(request.POST.get('longitude')))
+        user_loc = (lat, lon)
         distance = []
         for studio in Studio.objects.all():
             studio_loc = (studio.latitude, studio.longitude)
